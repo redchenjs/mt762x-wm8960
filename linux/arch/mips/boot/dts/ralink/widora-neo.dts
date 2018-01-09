@@ -189,11 +189,11 @@
 		audio-routing =
 		"Headphone Jack",		"HP_L",
 		"Headphone Jack",		"HP_R",
-		"Ext Spk",				"SPK_LN",
-		"Ext Spk",				"SPK_LP",
-		"Ext Spk",				"SPK_RN",
-		"Ext Spk",				"SPK_RP",
-		"LINPUT1",				"Mic",
-		"RINPUT1",				"Mic";
+		"Ext Spk",			"SPK_LN",
+		"Ext Spk",			"SPK_LP",
+		"Ext Spk",			"SPK_RN",
+		"Ext Spk",			"SPK_RP",
+		"LINPUT1",			"Mic",
+		"RINPUT1",			"Mic";
 	};
 };
