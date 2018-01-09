@@ -12,4 +12,5 @@ config SND_MT7628_SOC_WM8960
 	tristate "WM8960 SoC Audio support for MT7628"
 	select SND_RALINK_SOC_I2S
 	select SND_SOC_WM8960
-	
+	select I2C_MT7621
+	select I2C
