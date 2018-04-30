@@ -35,13 +35,13 @@
         mediatek,platform = <&i2s>;
         mediatek,audio-codec = <&wm8960>;
         audio-routing =
-        "Headphone Jack",	"HP_L",
-        "Headphone Jack",	"HP_R",
-        "Ext Spk",			"SPK_LN",
-        "Ext Spk",			"SPK_LP",
-        "Ext Spk",			"SPK_RN",
-        "Ext Spk",			"SPK_RP",
-        "LINPUT1",			"Mic",
-        "RINPUT1",			"Mic";
+        "Headphone Jack",   "HP_L",
+        "Headphone Jack",   "HP_R",
+        "Ext Spk",          "SPK_LN",
+        "Ext Spk",          "SPK_LP",
+        "Ext Spk",          "SPK_RN",
+        "Ext Spk",          "SPK_RP",
+        "LINPUT1",          "Mic",
+        "RINPUT1",          "Mic";
     };
 };
