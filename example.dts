@@ -12,15 +12,6 @@
     };
 };
 
-&i2c {
-    status = "okay";
-
-    wm8960: wm8960@1a {
-        compatible = "wlf,wm8960";
-        reg = <0x1a>;
-    };
-};
-
 &i2s {
     status = "okay";
 };
@@ -29,19 +20,29 @@
     status = "okay";
 };
 
+&i2c {
+    status = "okay";
+
+    codec: wm8960@1a {
+        compatible = "wlf,wm8960";
+        reg = <0x1a>;
+        wlf,shared-lrclk;
+    };
+};
+
 / {
     sound {
         compatible = "mediatek,mt76x8-wm8960-machine";
         mediatek,platform = <&i2s>;
-        mediatek,audio-codec = <&wm8960>;
+        mediatek,audio-codec = <&codec>;
         audio-routing =
-        "Headphone Jack",   "HP_L",
-        "Headphone Jack",   "HP_R",
-        "Ext Spk",          "SPK_LN",
-        "Ext Spk",          "SPK_LP",
-        "Ext Spk",          "SPK_RN",
-        "Ext Spk",          "SPK_RP",
-        "LINPUT1",          "Mic",
-        "RINPUT1",          "Mic";
+        "Headphone",    "HP_L",
+        "Headphone",    "HP_R",
+        "Ext Spk",      "SPK_LN",
+        "Ext Spk",      "SPK_LP",
+        "Ext Spk",      "SPK_RN",
+        "Ext Spk",      "SPK_RP",
+        "LINPUT1",      "Mic",
+        "RINPUT1",      "Mic";
     };
 };
