@@ -15,7 +15,7 @@ ALSA SoC machine driver for MT7628/88 SoC with WM8960 CODEC chip.
 
 ## Configuring the kernel
 
-`make menuconfig`
+`make menuconfig` (Use `make kernel_menuconfig` in OpenWrt SDK)
 
 * Navigate to `> Device Drivers > Sound card support > Advanced Linux Sound Architecture > ALSA for SoC audio support`.
 * Use Space key to enable `WM8960 SoC Audio support for MT76x8 SoC` module.
