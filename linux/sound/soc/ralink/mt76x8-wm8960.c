@@ -135,15 +135,20 @@ static int mt76x8_wm8960_machine_probe(struct platform_device *pdev)
     return ret;
 }
 
+#ifdef CONFIG_OF
 static const struct of_device_id mt76x8_wm8960_machine_dt_match[] = {
-    {.compatible = "mediatek,mt76x8-wm8960-machine"}
+    {.compatible = "mediatek,mt76x8-wm8960-machine"},
+    {}
 };
+#endif
 
 static struct platform_driver mt76x8_wm8960_machine = {
     .driver = {
         .name = "mt76x8-wm8960",
         .owner = THIS_MODULE,
+#ifdef CONFIG_OF
         .of_match_table = mt76x8_wm8960_machine_dt_match,
+#endif
     },
     .probe = mt76x8_wm8960_machine_probe,
 };
