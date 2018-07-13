@@ -158,5 +158,5 @@ module_platform_driver(mt76x8_wm8960_machine);
 /* Module information */
 MODULE_DESCRIPTION("MT76x8 WM8960 ALSA SoC machine driver");
 MODULE_AUTHOR("Jack Chen, <redchenjs@live.com>");
-MODULE_LICENSE("GPL");
+MODULE_LICENSE("GPL v2");
 MODULE_ALIAS("MT76x8 WM8960 ASoC driver");
