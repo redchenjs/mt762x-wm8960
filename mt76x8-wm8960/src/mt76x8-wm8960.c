@@ -29,6 +29,7 @@
 static const struct snd_soc_dapm_widget mt76x8_wm8960_dapm_widgets[] = {
     SND_SOC_DAPM_HP("Headphone", NULL),
     SND_SOC_DAPM_SPK("Ext Spk", NULL),
+    SND_SOC_DAPM_LINE("Line In", NULL),
     SND_SOC_DAPM_MIC("Mic", NULL)
 };
 
