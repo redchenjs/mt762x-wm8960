@@ -23,17 +23,22 @@ ALSA SoC machine driver for MT7628/88 SoC with WM8960 CODEC chip.
 
 ## Settings
 
-`alsamixer` or `amixer`
-
 ### Playback:
 
-* Unmute `Left Output Mixer PCM` and `Right Output Mixer PCM`.
-* Set a appropriate volume for `Headphone` and `Speaker`.
+```
+amixer sset "Left Output Mixer PCM" on
+amixer sset "Right Output Mixer PCM" on
+amixer sset "Headphone" 90%
+amixer sset "Speaker" 90%
+```
 
 ### Capture:
 
-* Unmute `Left Input Mixer Boost` and `Right Input Mixer Boost`.
-* Set `ALC Function` to `Stereo`.
+```
+amixer sset "Left Input Mixer Boost" on
+amixer sset "Right Input Mixer Boost" on
+amixer sset "ALC Function" "Stereo"
+```
 
 ## WM8960 MCLK
 
