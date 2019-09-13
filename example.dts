@@ -1,49 +1,44 @@
 &pinctrl {
-    state_default: pinctrl0 {
-        refclk {
-            ralink,group = "refclk";
-            ralink,function = "refclk";
-        };
-
-        i2s {
-            ralink,group = "i2s";
-            ralink,function = "i2s";
-        };
-    };
+	state_default: pinctrl0 {
+		i2s {
+			ralink,group = "i2s";
+			ralink,function = "i2s";
+		};
+	};
 };
 
 &i2s {
-    status = "okay";
+	status = "okay";
 };
 
 &gdma {
-    status = "okay";
+	status = "okay";
 };
 
 &i2c {
-    status = "okay";
+	status = "okay";
 
-    codec: wm8960@1a {
-        compatible = "wlf,wm8960";
-        reg = <0x1a>;
-        wlf,shared-lrclk;
-    };
+	codec: wm8960@1a {
+		compatible = "wlf,wm8960";
+		reg = <0x1a>;
+		wlf,shared-lrclk;
+	};
 };
 
 / {
-    sound {
-        compatible = "mediatek,mt76x8-wm8960-machine";
-        mediatek,platform = <&i2s>;
-        mediatek,audio-codec = <&codec>;
-        audio-routing =
-        "Headphone",    "HP_L",
-        "Headphone",    "HP_R",
-        "Ext Spk",      "SPK_LN",
-        "Ext Spk",      "SPK_LP",
-        "Ext Spk",      "SPK_RN",
-        "Ext Spk",      "SPK_RP",
-        "LINPUT1",      "Mic",
-        "RINPUT1",      "Mic",
-        "Mic",          "MICB";
-    };
+	sound {
+		compatible = "mediatek,mt76x8-wm8960-machine";
+		mediatek,platform = <&i2s>;
+		mediatek,audio-codec = <&codec>;
+		audio-routing =
+		"Headphone",    "HP_L",
+		"Headphone",    "HP_R",
+		"Ext Spk",      "SPK_LN",
+		"Ext Spk",      "SPK_LP",
+		"Ext Spk",      "SPK_RN",
+		"Ext Spk",      "SPK_RP",
+		"LINPUT1",      "Mic",
+		"RINPUT1",      "Mic",
+		"Mic",          "MICB";
+	};
 };
