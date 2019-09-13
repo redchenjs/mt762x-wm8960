@@ -7,12 +7,12 @@ ALSA SoC machine driver for MT7628/88 SoC with WM8960 CODEC chip.
 
 * OpenWrt with kernel 4.9 or later.
 
-## Preparing for build
+## Preparing
 
-* Add `mt76x8-wm8960` folder to OpenWrt folder `package/kernel`.
-* Modify your DTS file according to `example.dts`.
+* Add the `mt76x8-wm8960` folder to OpenWrt's `package/kernel` folder.
+* Modify the target DTS file according to `example.dts`.
 
-## Configuring OpenWrt
+## Configure the OpenWrt
 
 `make menuconfig`
 
@@ -21,17 +21,25 @@ ALSA SoC machine driver for MT7628/88 SoC with WM8960 CODEC chip.
 
 <img src="docs/menuconfig.png">
 
-## Known issues
+## Settings
 
-1. Capture does not work.
-2. Need to turn on `"Left Output Mixer PCM"` and `"Right Output Mixer PCM"` via `alsamixer` or `amixer` before playback.
+`alsamixer` or `amixer`
 
-## About WM8960 MCLK
+### Playback:
 
-WM8960 could get MCLK from either an externel clock source or MT7628/88's REFCLK pin.
+* Unmute `Left Output Mixer PCM` and `Right Output Mixer PCM`.
+* Set a appropriate volume for `Headphone` and `Speaker`.
 
-Modify your dts file as following can enable MT7628/88's REFCLK pin:
+### Capture:
 
+* Unmute `Left Input Mixer Boost` and `Right Input Mixer Boost`.
+* Set `ALC Function` to `Stereo`.
+
+## WM8960 MCLK
+
+WM8960 could get `MCLK` from either an externel clock source or MT7628/88's `refclk` (~12MHz).
+
+To enable MT7628/88's `refclk` output, you can modify the dts file as following:
 ```
 refclk {
     ralink,group = "refclk";

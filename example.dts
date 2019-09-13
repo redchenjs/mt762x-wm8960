@@ -43,6 +43,7 @@
         "Ext Spk",      "SPK_RN",
         "Ext Spk",      "SPK_RP",
         "LINPUT1",      "Mic",
-        "RINPUT1",      "Mic";
+        "RINPUT1",      "Mic",
+        "Mic",          "MICB";
     };
 };
