@@ -1,0 +1,8 @@
+config SND_SOC_MT76X8_WM8960
+	tristate "WM8960 SoC Audio support for MT76x8 SoC"
+	select SND_RALINK_SOC_I2S
+	select SND_SIMPLE_CARD
+	select SND_SOC_WM8960
+	select I2C_MT7621
+	select SND_HWDEP
+	select I2C
