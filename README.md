@@ -47,8 +47,22 @@ WM8960 could get `MCLK` from either an externel clock source or MT7628/88's `ref
 To enable MT7628/88's `refclk` output, you can modify the dts file as following:
 ```
 refclk {
-    ralink,group = "refclk";
-    ralink,function = "refclk";
+	ralink,group = "refclk";
+	ralink,function = "refclk";
+};
+```
+
+## WM8960 ADCLRC
+
+WM8960 could get `ADCLRC` from `DACLRC` internally and the `ADCLRC` pin can be used as `GPIO1`.
+
+To enable this feature, you can add the patch files in `patches-4.14` to OpenWrt's `target/linux/ramips/patches-4.14` folder, then modify the dts file as following:
+```
+codec: wm8960@1a {
+	compatible = "wlf,wm8960";
+	reg = <0x1a>;
+	wlf,shared-lrclk;
+	wlf,adclrc-gpio;
 };
 ```
 

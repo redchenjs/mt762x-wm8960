@@ -1,0 +1,40 @@
+--- a/include/sound/wm8960.h
++++ b/include/sound/wm8960.h
+@@ -19,6 +19,8 @@
+ 	bool capless;  /* Headphone outputs configured in capless mode */
+ 
+ 	bool shared_lrclk;  /* DAC and ADC LRCLKs are wired together */
++
++	bool adclrc_gpio;  /* ADCLRC pin is used as GPIO1 */
+ };
+ 
+ #endif
+--- a/sound/soc/codecs/wm8960.c
++++ b/sound/soc/codecs/wm8960.c
+@@ -1388,6 +1388,9 @@
+ 
+ 	if (of_property_read_bool(np, "wlf,shared-lrclk"))
+ 		pdata->shared_lrclk = true;
++
++	if (of_property_read_bool(np, "wlf,adclrc-gpio"))
++		pdata->adclrc_gpio = true;
+ }
+ 
+ static int wm8960_i2c_probe(struct i2c_client *i2c,
+@@ -1431,6 +1434,16 @@
+ 				ret);
+ 			return ret;
+ 		}
++	}
++
++	if (wm8960->pdata.adclrc_gpio) {
++		ret = regmap_update_bits(wm8960->regmap, WM8960_IFACE2,
++					 0x40, 0x40);
++		if (ret != 0) {
++			dev_err(&i2c->dev, "Failed to enable ALRCGPIO: %d\n",
++				ret);
++			return ret;
++		}
+ 	}
+ 
+ 	/* Latch the update bits */
