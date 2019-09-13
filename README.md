@@ -5,22 +5,21 @@ ALSA SoC machine driver for MT7628/88 SoC with WM8960 CODEC chip.
 
 ## Requirements
 
-* Linux kernel 4.9 or later.
+* OpenWrt with kernel 4.9 or later.
 
 ## Preparing for build
 
-* Add `linux/sound/soc/ralink` folder to your kernel.
-* Add `source "sound/soc/ralink/Kconfig"` line to your `sound/soc/Kconfig`.(no need if the line exists)
+* Add `mt76x8-wm8960` folder to OpenWrt folder `package/kernel`.
 * Modify your DTS file according to `example.dts`.
 
-## Configuring the kernel
+## Configuring OpenWrt
 
-`make menuconfig` (Use `make kernel_menuconfig` in OpenWrt SDK)
+`make menuconfig`
 
-* Navigate to `> Device Drivers > Sound card support > Advanced Linux Sound Architecture > ALSA for SoC audio support`.
-* Use Space key to enable `WM8960 SoC Audio support for MT76x8 SoC` module.
+* Navigate to `> Kernel modules > Sound Support`.
+* Enable `kmod-sound-core` and `kmod-sound-mt76x8-wm8960`.
 
-<img src="docs/kernelconfig.png">
+<img src="docs/menuconfig.png">
 
 ## Known issues
 
