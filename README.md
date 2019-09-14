@@ -10,7 +10,7 @@ ALSA SoC machine driver for MT7628/88 SoC with WM8960 CODEC chip.
 ## Preparing
 
 * Add the `mt76x8-wm8960` folder to the `package/kernel` folder of OpenWrt.
-* Modify the target DTS file in the `target/linux/ramips/dts` folder of OpenWrt according to `example.dts`.
+* Modify the target DTS file in the `target/linux/ramips/dts` folder of OpenWrt according to `dts/example.dts`.
 
 ## Configuring the OpenWrt
 
