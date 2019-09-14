@@ -9,19 +9,33 @@ ALSA SoC machine driver for MT7628/88 SoC with WM8960 CODEC chip.
 
 ## Preparing
 
-* Add the `mt76x8-wm8960` folder to OpenWrt's `package/kernel` folder.
-* Modify the target DTS file according to `example.dts`.
+* Add the `mt76x8-wm8960` folder to the `package/kernel` folder of OpenWrt.
+* Modify the target DTS file in the `target/linux/ramips/dts` folder of OpenWrt according to `example.dts`.
 
 ## Configure the OpenWrt
 
 `make menuconfig`
 
-* Navigate to `> Kernel modules > Sound Support`.
-* Enable `kmod-sound-core` and `kmod-sound-mt76x8-wm8960`.
+### Kernel modules:
 
-<img src="docs/menuconfig.png">
+* Navigate to `> Kernel modules > Sound Support`.
+* Select `kmod-sound-core` and `kmod-sound-mt76x8-wm8960`.
+
+<img src="docs/kmod.png">
+
+### Userspace tools:
+
+* Navigate to `> Sound` and select `alsa-utils`.
+
+<img src="docs/alsa-utils.png">
+
+## Build the image
+
+`make -j9 V=s`
 
 ## Settings
+
+By default, the WM8960 will be muted after rebooting. Run the following commands before the playback/capture.
 
 ### Playback:
 
@@ -42,9 +56,9 @@ amixer sset "ALC Function" "Stereo"
 
 ## WM8960 MCLK
 
-WM8960 can get `MCLK` from an externel clock source or MT7628/88's `refclk` (~12MHz).
+The WM8960 can get `MCLK` from an externel clock source or the `refclk`(~12MHz) output of MT7628/88.
 
-To enable MT7628/88's `refclk` output, you can modify the dts file as follows:
+To enable the `refclk` output, you can modify the dts file as follows:
 ```
 refclk {
 	ralink,group = "refclk";
@@ -54,7 +68,7 @@ refclk {
 
 ## WM8960 ADCLRC
 
-WM8960 can internally get `ADCLRC` from `DACLRC` and the `ADCLRC` pin can be used as `GPIO1`.
+The WM8960 can internally get `ADCLRC` from `DACLRC` and the `ADCLRC` pin can be used as `GPIO1`. It is useful for some boards that only have the `DACLRC` pin connected and the `ADCLRC` pin is left floating.
 
 To enable this feature, add the patch file from `patches-4.14` to OpenWrt's `target/linux/ramips/patches-4.14` folder and modify the dts file as follows:
 ```
