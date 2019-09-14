@@ -2,11 +2,11 @@
  * mt76x8-wm8960.c  --  MT76x8 WM8960 ALSA SoC machine driver
  *
  * Copyright 2018 Jack Chen <redchenjs@live.com>
- * 
+ *
  * Based on mt2701-wm8960.c
  * Copyright (c) 2017 MediaTek Inc.
  * Author: Ryder Lee <ryder.lee@mediatek.com>
- * 
+ *
  * The code contained herein is licensed under the GNU General Public
  * License. You may obtain a copy of the GNU General Public License
  * Version 2 or later at the following locations:
@@ -30,7 +30,7 @@ static const struct snd_soc_dapm_widget mt76x8_wm8960_dapm_widgets[] = {
     SND_SOC_DAPM_HP("Headphone", NULL),
     SND_SOC_DAPM_SPK("Ext Spk", NULL),
     SND_SOC_DAPM_LINE("Line In", NULL),
-    SND_SOC_DAPM_MIC("Mic", NULL)
+    SND_SOC_DAPM_MIC("Mic", NULL),
 };
 
 static int mt76x8_wm8960_ops_hw_params(struct snd_pcm_substream *substream,
@@ -53,7 +53,7 @@ static int mt76x8_wm8960_ops_hw_params(struct snd_pcm_substream *substream,
 }
 
 static struct snd_soc_ops mt76x8_wm8960_ops = {
-    .hw_params = mt76x8_wm8960_ops_hw_params
+    .hw_params = mt76x8_wm8960_ops_hw_params,
 };
 
 static struct snd_soc_dai_link mt76x8_wm8960_dai_links[] = {
@@ -65,8 +65,8 @@ static struct snd_soc_dai_link mt76x8_wm8960_dai_links[] = {
         .dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBS_CFS,
         .ops = &mt76x8_wm8960_ops,
         .dpcm_playback = 1,
-        .dpcm_capture = 1
-    }
+        .dpcm_capture = 1,
+    },
 };
 
 static struct snd_soc_card mt76x8_wm8960_card = {
@@ -75,7 +75,7 @@ static struct snd_soc_card mt76x8_wm8960_card = {
     .dai_link = mt76x8_wm8960_dai_links,
     .num_links = ARRAY_SIZE(mt76x8_wm8960_dai_links),
     .dapm_widgets = mt76x8_wm8960_dapm_widgets,
-    .num_dapm_widgets = ARRAY_SIZE(mt76x8_wm8960_dapm_widgets)
+    .num_dapm_widgets = ARRAY_SIZE(mt76x8_wm8960_dapm_widgets),
 };
 
 static int mt76x8_wm8960_machine_probe(struct platform_device *pdev)
@@ -96,7 +96,7 @@ static int mt76x8_wm8960_machine_probe(struct platform_device *pdev)
         dev_err(&pdev->dev, "failed to find platform device\n");
         return -EINVAL;
     }
-    for (i = 0; i < card->num_links; i++) {
+    for (i=0; i<card->num_links; i++) {
         if (mt76x8_wm8960_dai_links[i].platform_name) {
             continue;
         }
@@ -115,7 +115,7 @@ static int mt76x8_wm8960_machine_probe(struct platform_device *pdev)
         dev_err(&pdev->dev, "failed to find audio codec device\n");
         return -EINVAL;
     }
-    for (i = 0; i < card->num_links; i++) {
+    for (i=0; i<card->num_links; i++) {
         if (mt76x8_wm8960_dai_links[i].codec_name) {
             continue;
         }
