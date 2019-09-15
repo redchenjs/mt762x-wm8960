@@ -1,8 +1,6 @@
 config SND_SOC_MT76X8_WM8960
-	tristate "WM8960 SoC Audio support for MT76x8 SoC"
-	select SND_RALINK_SOC_I2S
-	select SND_SIMPLE_CARD
+	tristate "ASoC Audio driver for Ralink SoC with WM8960 codec"
+	depends on SND_RALINK_SOC_I2S && I2C
 	select SND_SOC_WM8960
-	select I2C_MT7621
-	select SND_HWDEP
-	select I2C
+	help
+	  Say Y if you want to use WM8960 codec on Ralink/MediaTek based boards.

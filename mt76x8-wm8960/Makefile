@@ -18,10 +18,9 @@ include $(INCLUDE_DIR)/package.mk
 define KernelPackage/sound-mt76x8-wm8960
 	SUBMENU:=Sound Support
 	TITLE:=MT76x8 WM8960 ALSA SoC machine driver
-	DEPENDS:=@TARGET_ramips +kmod-sound-mt7620
-	FILES:= \
-		$(PKG_BUILD_DIR)/snd-soc-mt76x8-wm8960.ko
-	AUTOLOAD:=$(call AutoLoad,99,snd-soc-mt76x8-wm8960)
+	DEPENDS:=@TARGET_ramips +kmod-sound-mt7620 @!TARGET_ramips_rt288x
+	FILES:=$(PKG_BUILD_DIR)/snd-soc-mt76x8-wm8960.ko
+	AUTOLOAD:=$(call AutoLoad,91,snd-soc-mt76x8-wm8960)
 endef
 
 NOSTDINC_FLAGS = \
