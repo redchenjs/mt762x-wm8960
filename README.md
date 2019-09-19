@@ -12,6 +12,28 @@ ALSA SoC machine driver for MT7628/88 SoC with WM8960 CODEC chip.
 * Add the `mt76x8-wm8960` folder to the `package/kernel` folder of OpenWrt.
 * Modify the target DTS file in the `target/linux/ramips/dts` folder of OpenWrt according to `dts/example.dts`.
 
+### WM8960 MCLK
+
+The WM8960 can get `MCLK` from an externel clock source or the `refclk` output of MT7628/88(~12MHz). To enable the `refclk` output, you can modify the dts file as follows:
+```
+refclk {
+	ralink,group = "refclk";
+	ralink,function = "refclk";
+};
+```
+
+### WM8960 ADCLRC
+
+The WM8960 can internally get `ADCLRC` from `DACLRC` and the `ADCLRC` pin can be used as `GPIO1`. It is useful for some boards that only have the `DACLRC` pin connected and the `ADCLRC` pin is left floating. To enable this feature, add the patch file from the `patches-4.14` folder to the `target/linux/ramips/patches-4.14` folder of OpenWrt and modify the dts file as follows:
+```
+codec: wm8960@1a {
+	compatible = "wlf,wm8960";
+	reg = <0x1a>;
+	wlf,shared-lrclk;
+	wlf,adclrc-gpio;
+};
+```
+
 ## Configuring the OpenWrt
 
 `make menuconfig`
@@ -52,32 +74,6 @@ amixer sset "Speaker" 90%
 amixer sset "Left Input Mixer Boost" on
 amixer sset "Right Input Mixer Boost" on
 amixer sset "ALC Function" "Stereo"
-```
-
-## WM8960 MCLK
-
-The WM8960 can get `MCLK` from an externel clock source or the `refclk` output of MT7628/88(~12MHz).
-
-To enable the `refclk` output, you can modify the dts file as follows:
-```
-refclk {
-	ralink,group = "refclk";
-	ralink,function = "refclk";
-};
-```
-
-## WM8960 ADCLRC
-
-The WM8960 can internally get `ADCLRC` from `DACLRC` and the `ADCLRC` pin can be used as `GPIO1`. It is useful for some boards that only have the `DACLRC` pin connected and the `ADCLRC` pin is left floating.
-
-To enable this feature, add the patch file from the `patches-4.14` folder to the `target/linux/ramips/patches-4.14` folder of OpenWrt and modify the dts file as follows:
-```
-codec: wm8960@1a {
-	compatible = "wlf,wm8960";
-	reg = <0x1a>;
-	wlf,shared-lrclk;
-	wlf,adclrc-gpio;
-};
 ```
 
 ## WM8960 block diagram
