@@ -1,39 +1,25 @@
+// SPDX-License-Identifier: GPL-2.0
 /*
- * mt76x8-wm8960.c  --  MT76x8 WM8960 ALSA SoC machine driver
+ * mt762x-wm8960.c  --  MT762X WM8960 ALSA SoC machine driver
  *
- * Copyright 2018 Jack Chen <redchenjs@live.com>
- *
- * Based on mt2701-wm8960.c
- * Copyright (c) 2017 MediaTek Inc.
- * Author: Ryder Lee <ryder.lee@mediatek.com>
- *
- * The code contained herein is licensed under the GNU General Public
- * License. You may obtain a copy of the GNU General Public License
- * Version 2 or later at the following locations:
- *
- * http://www.opensource.org/licenses/gpl-license.html
- * http://www.gnu.org/copyleft/gpl.html
+ * Copyright 2018-2020 Jack Chen <redchenjs@live.com>
  */
 
 #include <linux/module.h>
 #include <linux/of_platform.h>
 #include <linux/i2c.h>
-#include <linux/slab.h>
 #include <sound/soc.h>
-#include <sound/pcm_params.h>
-#include <sound/soc-dapm.h>
-#include <linux/pinctrl/consumer.h>
 
 #include "../codecs/wm8960.h"
 
-static const struct snd_soc_dapm_widget mt76x8_wm8960_dapm_widgets[] = {
+static const struct snd_soc_dapm_widget mt762x_wm8960_dapm_widgets[] = {
     SND_SOC_DAPM_HP("Headphone", NULL),
     SND_SOC_DAPM_SPK("Ext Spk", NULL),
     SND_SOC_DAPM_LINE("Line In", NULL),
     SND_SOC_DAPM_MIC("Mic", NULL),
 };
 
-static int mt76x8_wm8960_ops_hw_params(struct snd_pcm_substream *substream,
+static int mt762x_wm8960_ops_hw_params(struct snd_pcm_substream *substream,
                                        struct snd_pcm_hw_params *params)
 {
     struct snd_soc_pcm_runtime *rtd = substream->private_data;
@@ -52,37 +38,38 @@ static int mt76x8_wm8960_ops_hw_params(struct snd_pcm_substream *substream,
     return 0;
 }
 
-static struct snd_soc_ops mt76x8_wm8960_ops = {
-    .hw_params = mt76x8_wm8960_ops_hw_params,
+static struct snd_soc_ops mt762x_wm8960_ops = {
+    .hw_params = mt762x_wm8960_ops_hw_params,
 };
 
-static struct snd_soc_dai_link mt76x8_wm8960_dai_links[] = {
+static struct snd_soc_dai_link mt762x_wm8960_dai_links[] = {
     {
         .name = "wm8960-codec",
         .stream_name = "wm8960-hifi",
         .cpu_dai_name = "ralink-i2s",
         .codec_dai_name = "wm8960-hifi",
         .dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBS_CFS,
-        .ops = &mt76x8_wm8960_ops,
-        .dpcm_playback = 1,
-        .dpcm_capture = 1,
+        .ops = &mt762x_wm8960_ops,
     },
 };
 
-static struct snd_soc_card mt76x8_wm8960_card = {
-    .name = "MT76x8 WM8960 ASoC Card",
+static struct snd_soc_card mt762x_wm8960_card = {
+    .name = "mt762x-wm8960",
     .owner = THIS_MODULE,
-    .dai_link = mt76x8_wm8960_dai_links,
-    .num_links = ARRAY_SIZE(mt76x8_wm8960_dai_links),
-    .dapm_widgets = mt76x8_wm8960_dapm_widgets,
-    .num_dapm_widgets = ARRAY_SIZE(mt76x8_wm8960_dapm_widgets),
+    .dai_link = mt762x_wm8960_dai_links,
+    .num_links = ARRAY_SIZE(mt762x_wm8960_dai_links),
+    .dapm_widgets = mt762x_wm8960_dapm_widgets,
+    .num_dapm_widgets = ARRAY_SIZE(mt762x_wm8960_dapm_widgets),
 };
 
-static int mt76x8_wm8960_machine_probe(struct platform_device *pdev)
+static int mt762x_wm8960_machine_probe(struct platform_device *pdev)
 {
-    struct snd_soc_card *card = &mt76x8_wm8960_card;
-    struct device_node *platform_node, *codec_node;
+    struct snd_soc_card *card = &mt762x_wm8960_card;
+    struct snd_soc_pcm_runtime *rtd;
+    struct snd_soc_dai *codec_dai;
     struct platform_device *platform_dev;
+    struct device_node *platform_node;
+    struct device_node *codec_node;
     struct i2c_client *codec_dev;
     int ret, i;
 
@@ -97,10 +84,10 @@ static int mt76x8_wm8960_machine_probe(struct platform_device *pdev)
         return -EINVAL;
     }
     for (i=0; i<card->num_links; i++) {
-        if (mt76x8_wm8960_dai_links[i].platform_name) {
+        if (mt762x_wm8960_dai_links[i].platform_name) {
             continue;
         }
-        mt76x8_wm8960_dai_links[i].platform_of_node = platform_node;
+        mt762x_wm8960_dai_links[i].platform_of_node = platform_node;
     }
 
     card->dev = &pdev->dev;
@@ -116,10 +103,10 @@ static int mt76x8_wm8960_machine_probe(struct platform_device *pdev)
         return -EINVAL;
     }
     for (i=0; i<card->num_links; i++) {
-        if (mt76x8_wm8960_dai_links[i].codec_name) {
+        if (mt762x_wm8960_dai_links[i].codec_name) {
             continue;
         }
-        mt76x8_wm8960_dai_links[i].codec_of_node = codec_node;
+        mt762x_wm8960_dai_links[i].codec_of_node = codec_node;
     }
 
     ret = snd_soc_of_parse_audio_routing(card, "audio-routing");
@@ -131,33 +118,48 @@ static int mt76x8_wm8960_machine_probe(struct platform_device *pdev)
     ret = devm_snd_soc_register_card(&pdev->dev, card);
     if (ret) {
         dev_err(&pdev->dev, "%s snd_soc_register_card fail %d\n", __func__, ret);
+        return ret;
+    }
+
+    list_for_each_entry(rtd, &card->rtd_list, list) {
+        if (!strcmp(rtd->codec_dai->name, mt762x_wm8960_dai_links->codec_dai_name)) {
+            codec_dai = rtd->codec_dai;
+            break;
+        }
+    }
+    if (!codec_dai) {
+        dev_err(&pdev->dev, "failed to get codec dai\n");
+        return -EINVAL;
+    }
+
+    // When ADCLRC is configured as a GPIO, DACLRC is used for the ADCs
+    if (of_property_read_bool(codec_node, "wlf,adclrc-as-gpio")) {
+        snd_soc_component_update_bits(codec_dai->component, WM8960_IFACE2, 0x40, 0x40);
     }
 
     return ret;
 }
 
 #ifdef CONFIG_OF
-static const struct of_device_id mt76x8_wm8960_machine_dt_match[] = {
-    {.compatible = "mediatek,mt76x8-wm8960-machine"},
+static const struct of_device_id mt762x_wm8960_machine_dt_match[] = {
+    {.compatible = "mediatek,mt762x-wm8960-machine"},
     {}
 };
 #endif
 
-static struct platform_driver mt76x8_wm8960_machine = {
+static struct platform_driver mt762x_wm8960_machine = {
     .driver = {
-        .name = "mt76x8-wm8960",
-        .owner = THIS_MODULE,
+        .name = "mt762x-wm8960",
 #ifdef CONFIG_OF
-        .of_match_table = mt76x8_wm8960_machine_dt_match,
+        .of_match_table = mt762x_wm8960_machine_dt_match,
 #endif
     },
-    .probe = mt76x8_wm8960_machine_probe,
+    .probe = mt762x_wm8960_machine_probe,
 };
 
-module_platform_driver(mt76x8_wm8960_machine);
+module_platform_driver(mt762x_wm8960_machine);
 
-/* Module information */
-MODULE_DESCRIPTION("MT76x8 WM8960 ALSA SoC machine driver");
+MODULE_DESCRIPTION("MT762X WM8960 ALSA SoC machine driver");
 MODULE_AUTHOR("Jack Chen <redchenjs@live.com>");
+MODULE_ALIAS("platform:mt762x-wm8960-asoc-card");
 MODULE_LICENSE("GPL v2");
-MODULE_ALIAS("MT76x8 WM8960 ASoC driver");

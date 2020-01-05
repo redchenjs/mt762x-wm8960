@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=mt76x8-wm8960
+PKG_NAME:=mt762x-wm8960
 PKG_RELEASE=1
 
 PKG_LICENSE:=GPLv2
@@ -10,28 +10,28 @@ PKG_MAINTAINER:=Jack Chen <redchenjs@live.com>
 PKG_BUILD_PARALLEL:=1
 
 PKG_CONFIG_DEPENDS += \
-	CONFIG_PACKAGE_kmod-sound-mt76x8-wm8960
+	CONFIG_PACKAGE_kmod-sound-mt762x-wm8960
 
 include $(INCLUDE_DIR)/kernel.mk
 include $(INCLUDE_DIR)/package.mk
 
-define KernelPackage/sound-mt76x8-wm8960
+define KernelPackage/sound-mt762x-wm8960
 	SUBMENU:=Sound Support
-	TITLE:=MT76x8 WM8960 ALSA SoC Machine Driver
+	TITLE:=MT762X WM8960 ALSA SoC Machine Driver
 	DEPENDS:=@TARGET_ramips +kmod-sound-mt7620 \
 		+(TARGET_ramips_mt7621||TARGET_ramips_mt76x8):kmod-i2c-mt7628 \
 		+!(TARGET_ramips_mt7621||TARGET_ramips_mt76x8):kmod-i2c-ralink \
 		@!TARGET_ramips_rt288x
-	FILES:=$(PKG_BUILD_DIR)/snd-soc-mt76x8-wm8960.ko
-	AUTOLOAD:=$(call AutoLoad,91,snd-soc-mt76x8-wm8960)
+	FILES:=$(PKG_BUILD_DIR)/snd-soc-mt762x-wm8960.ko
+	AUTOLOAD:=$(call AutoLoad,91,snd-soc-mt762x-wm8960)
 endef
 
 NOSTDINC_FLAGS = \
 	-I$(PKG_BUILD_DIR) \
 	-I$(LINUX_DIR)/sound/soc/ralink
 
-ifdef CONFIG_PACKAGE_kmod-sound-mt76x8-wm8960
-	PKG_MAKE_FLAGS += CONFIG_SND_SOC_MT76X8_WM8960=m
+ifdef CONFIG_PACKAGE_kmod-sound-mt762x-wm8960
+	PKG_MAKE_FLAGS += CONFIG_SND_SOC_MT762X_WM8960=m
 endif
 
 define Build/Compile
@@ -43,8 +43,8 @@ define Build/Compile
 		modules
 endef
 
-define Package/kmod-sound-mt76x8-wm8960/install
+define Package/kmod-sound-mt762x-wm8960/install
 	true
 endef
 
-$(eval $(call KernelPackage,sound-mt76x8-wm8960))
+$(eval $(call KernelPackage,sound-mt762x-wm8960))

@@ -1,4 +1,4 @@
-config SND_SOC_MT76X8_WM8960
+config SND_SOC_MT762X_WM8960
 	tristate "ASoC Audio driver for Ralink SoC with WM8960 codec"
 	depends on SND_RALINK_SOC_I2S && I2C
 	select SND_SOC_WM8960

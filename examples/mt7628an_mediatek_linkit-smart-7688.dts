@@ -50,42 +50,36 @@
 	};
 };
 
-&pinctrl {
-	state_default: pinctrl0 {
-		gpio {
-			ralink,group = "gpio";
-			ralink,function = "gpio";
-		};
-
-		refclk {
-			ralink,group = "refclk";
-			ralink,function = "gpio";
-		};
-
-		i2s {
-			ralink,group = "i2s";
-			ralink,function = "i2s";
-		};
-
-		spis {
-			ralink,group = "spis";
-			ralink,function = "gpio";
-		};
-
-		wled_an {
-			ralink,group = "wled_an";
-			ralink,function = "gpio";
-		};
-
-		wdt {
-			ralink,group = "wdt";
-			ralink,function = "gpio";
-		};
+&state_default {
+	gpio {
+		ralink,group = "gpio";
+		ralink,function = "gpio";
 	};
-};
 
-&wmac {
-	status = "okay";
+	refclk {
+		ralink,group = "refclk";
+		ralink,function = "gpio";
+	};
+
+	i2s {
+		ralink,group = "i2s";
+		ralink,function = "i2s";
+	};
+
+	spis {
+		ralink,group = "spis";
+		ralink,function = "gpio";
+	};
+
+	wled_an {
+		ralink,group = "wled_an";
+		ralink,function = "gpio";
+	};
+
+	wdt {
+		ralink,group = "wdt";
+		ralink,function = "gpio";
+	};
 };
 
 &spi0 {
@@ -169,6 +163,10 @@
 	mediatek,cd-high;
 };
 
+&wmac {
+	status = "okay";
+};
+
 &i2s {
 	status = "okay";
 };
@@ -179,7 +177,7 @@
 
 / {
 	sound {
-		compatible = "mediatek,mt76x8-wm8960-machine";
+		compatible = "mediatek,mt762x-wm8960-machine";
 		mediatek,platform = <&i2s>;
 		mediatek,audio-codec = <&codec>;
 		audio-routing =
