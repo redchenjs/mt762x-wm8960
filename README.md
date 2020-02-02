@@ -12,7 +12,7 @@ ALSA SoC machine driver for MT762X SoCs with WM8960 CODEC chip.
 * Add the `mt762x-wm8960` folder to the `package/kernel` folder of OpenWrt.
 ```
 cd package/kernel
-git clone https://github.com/redchenjs/mt762x-wm8960
+git clone https://github.com/redchenjs/mt762x-wm8960.git
 ```
 * Modify the target DTS file in the `target/linux/ramips/dts` folder of OpenWrt according to the example DTS files.
 
@@ -64,8 +64,8 @@ codec: wm8960@1a {
 The WM8960 will be muted after a reboot. Remember to properly set the volume before playing.
 
 ```
-amixer sset "Headphone" 50%
-amixer sset "Speaker" 50%
+amixer sset "Headphone" 90
+amixer sset "Speaker" 90
 ```
 
 ### Playback
