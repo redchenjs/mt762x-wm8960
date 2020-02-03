@@ -61,6 +61,8 @@ codec: wm8960@1a {
 
 ## Settings
 
+Put the `examples/asound.conf` file in the `/etc` folder to avoid noise when playing some audio.
+
 The WM8960 will be muted after a reboot. Remember to properly set the volume before playing.
 
 ```
