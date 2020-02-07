@@ -54,7 +54,7 @@ static struct snd_soc_dai_link mt762x_wm8960_dai_links[] = {
 };
 
 static struct snd_soc_card mt762x_wm8960_card = {
-    .name = "mt762x-wm8960",
+    .name = "MT762X WM8960 ASoC Card",
     .owner = THIS_MODULE,
     .dai_link = mt762x_wm8960_dai_links,
     .num_links = ARRAY_SIZE(mt762x_wm8960_dai_links),
