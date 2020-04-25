@@ -6,8 +6,6 @@
  */
 
 #include <linux/module.h>
-#include <linux/of_platform.h>
-#include <linux/i2c.h>
 #include <sound/soc.h>
 
 #include "../codecs/wm8960.h"
@@ -42,14 +40,18 @@ static struct snd_soc_ops mt762x_wm8960_ops = {
     .hw_params = mt762x_wm8960_ops_hw_params,
 };
 
+SND_SOC_DAILINK_DEFS(codec,
+    DAILINK_COMP_ARRAY(COMP_CPU("ralink-i2s")),
+    DAILINK_COMP_ARRAY(COMP_CODEC(NULL, "wm8960-hifi")),
+    DAILINK_COMP_ARRAY(COMP_EMPTY()));
+
 static struct snd_soc_dai_link mt762x_wm8960_dai_links[] = {
     {
         .name = "wm8960-codec",
         .stream_name = "wm8960-hifi",
-        .cpu_dai_name = "ralink-i2s",
-        .codec_dai_name = "wm8960-hifi",
         .dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBS_CFS,
         .ops = &mt762x_wm8960_ops,
+        SND_SOC_DAILINK_REG(codec),
     },
 };
 
@@ -65,12 +67,10 @@ static struct snd_soc_card mt762x_wm8960_card = {
 static int mt762x_wm8960_machine_probe(struct platform_device *pdev)
 {
     struct snd_soc_card *card = &mt762x_wm8960_card;
+    struct device_node *platform_node, *codec_node;
+    struct snd_soc_dai_link *dai_link;
     struct snd_soc_pcm_runtime *rtd;
     struct snd_soc_dai *codec_dai;
-    struct platform_device *platform_dev;
-    struct device_node *platform_node;
-    struct device_node *codec_node;
-    struct i2c_client *codec_dev;
     int ret, i;
 
     platform_node = of_parse_phandle(pdev->dev.of_node, "mediatek,platform", 0);
@@ -78,16 +78,11 @@ static int mt762x_wm8960_machine_probe(struct platform_device *pdev)
         dev_err(&pdev->dev, "property 'platform' missing or invalid\n");
         return -EINVAL;
     }
-    platform_dev = of_find_device_by_node(platform_node);
-    if (!platform_dev) {
-        dev_err(&pdev->dev, "failed to find platform device\n");
-        return -EINVAL;
-    }
-    for (i=0; i<card->num_links; i++) {
-        if (mt762x_wm8960_dai_links[i].platform_name) {
+    for_each_card_prelinks(card, i, dai_link) {
+        if (dai_link->platforms->name) {
             continue;
         }
-        mt762x_wm8960_dai_links[i].platform_of_node = platform_node;
+        dai_link->platforms->of_node = platform_node;
     }
 
     card->dev = &pdev->dev;
@@ -97,16 +92,11 @@ static int mt762x_wm8960_machine_probe(struct platform_device *pdev)
         dev_err(&pdev->dev, "property 'audio-codec' missing or invalid\n");
         return -EINVAL;
     }
-    codec_dev = of_find_i2c_device_by_node(codec_node);
-    if (!codec_dev || !codec_dev->dev.driver) {
-        dev_err(&pdev->dev, "failed to find audio codec device\n");
-        return -EINVAL;
-    }
-    for (i=0; i<card->num_links; i++) {
-        if (mt762x_wm8960_dai_links[i].codec_name) {
+    for_each_card_prelinks(card, i, dai_link) {
+        if (dai_link->codecs->name) {
             continue;
         }
-        mt762x_wm8960_dai_links[i].codec_of_node = codec_node;
+        dai_link->codecs->of_node = codec_node;
     }
 
     ret = snd_soc_of_parse_audio_routing(card, "audio-routing");
@@ -122,7 +112,7 @@ static int mt762x_wm8960_machine_probe(struct platform_device *pdev)
     }
 
     list_for_each_entry(rtd, &card->rtd_list, list) {
-        if (!strcmp(rtd->codec_dai->name, mt762x_wm8960_dai_links->codec_dai_name)) {
+        if (!strcmp(rtd->codec_dai->name, "wm8960-hifi")) {
             codec_dai = rtd->codec_dai;
             break;
         }
