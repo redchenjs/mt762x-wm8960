@@ -5,7 +5,7 @@ ALSA SoC machine driver for MT762X SoCs with WM8960 CODEC chip.
 
 ## Requirements
 
-* OpenWrt with kernel 4.9 or later.
+* OpenWrt with kernel 5.4 or later.
 
 ## Preparing
 
@@ -21,8 +21,8 @@ git clone https://github.com/redchenjs/mt762x-wm8960.git
 The WM8960 can get `MCLK` from an externel clock source or the `refclk` output of MT762X SoCs (12MHz). To enable the `refclk` output, you can modify the dts file as follows:
 ```
 refclk {
-	ralink,group = "refclk";
-	ralink,function = "refclk";
+	groups = "refclk";
+	function = "refclk";
 };
 ```
 
