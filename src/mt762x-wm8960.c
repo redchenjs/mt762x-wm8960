@@ -6,23 +6,22 @@
  */
 
 #include <linux/module.h>
+#include <sound/wm8960.h>
 #include <sound/soc.h>
-
-#include "../codecs/wm8960.h"
 
 static const struct snd_soc_dapm_widget mt762x_wm8960_dapm_widgets[] = {
     SND_SOC_DAPM_HP("Headphone", NULL),
-    SND_SOC_DAPM_SPK("Ext Spk", NULL),
-    SND_SOC_DAPM_LINE("Line In", NULL),
-    SND_SOC_DAPM_MIC("Mic", NULL),
+    SND_SOC_DAPM_SPK("Speaker", NULL),
+    SND_SOC_DAPM_MIC("Microphone", NULL),
+    SND_SOC_DAPM_LINE("Line In", NULL)
 };
 
 static int mt762x_wm8960_ops_hw_params(struct snd_pcm_substream *substream,
                                        struct snd_pcm_hw_params *params)
 {
-    struct snd_soc_pcm_runtime *rtd = substream->private_data;
-    struct snd_soc_dai *codec_dai = rtd->codec_dai;
-    struct snd_soc_dai *cpu_dai = rtd->cpu_dai;
+    struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
+    struct snd_soc_dai *codec_dai = asoc_rtd_to_codec(rtd, 0);
+    struct snd_soc_dai *cpu_dai = asoc_rtd_to_cpu(rtd, 0);
     unsigned int mclk_rate;
     unsigned int rate = params_rate(params);
     unsigned int div_mclk_over_bck = rate > 192000 ? 2 : 4;
@@ -37,7 +36,7 @@ static int mt762x_wm8960_ops_hw_params(struct snd_pcm_substream *substream,
 }
 
 static struct snd_soc_ops mt762x_wm8960_ops = {
-    .hw_params = mt762x_wm8960_ops_hw_params,
+    .hw_params = mt762x_wm8960_ops_hw_params
 };
 
 SND_SOC_DAILINK_DEFS(codec,
@@ -51,8 +50,8 @@ static struct snd_soc_dai_link mt762x_wm8960_dai_links[] = {
         .stream_name = "wm8960-hifi",
         .dai_fmt = SND_SOC_DAIFMT_I2S | SND_SOC_DAIFMT_NB_NF | SND_SOC_DAIFMT_CBS_CFS,
         .ops = &mt762x_wm8960_ops,
-        SND_SOC_DAILINK_REG(codec),
-    },
+        SND_SOC_DAILINK_REG(codec)
+    }
 };
 
 static struct snd_soc_card mt762x_wm8960_card = {
@@ -61,7 +60,7 @@ static struct snd_soc_card mt762x_wm8960_card = {
     .dai_link = mt762x_wm8960_dai_links,
     .num_links = ARRAY_SIZE(mt762x_wm8960_dai_links),
     .dapm_widgets = mt762x_wm8960_dapm_widgets,
-    .num_dapm_widgets = ARRAY_SIZE(mt762x_wm8960_dapm_widgets),
+    .num_dapm_widgets = ARRAY_SIZE(mt762x_wm8960_dapm_widgets)
 };
 
 static int mt762x_wm8960_machine_probe(struct platform_device *pdev)
@@ -69,8 +68,6 @@ static int mt762x_wm8960_machine_probe(struct platform_device *pdev)
     struct snd_soc_card *card = &mt762x_wm8960_card;
     struct device_node *platform_node, *codec_node;
     struct snd_soc_dai_link *dai_link;
-    struct snd_soc_pcm_runtime *rtd;
-    struct snd_soc_dai *codec_dai;
     int ret, i;
 
     platform_node = of_parse_phandle(pdev->dev.of_node, "mediatek,platform", 0);
@@ -111,22 +108,6 @@ static int mt762x_wm8960_machine_probe(struct platform_device *pdev)
         return ret;
     }
 
-    list_for_each_entry(rtd, &card->rtd_list, list) {
-        if (!strcmp(rtd->codec_dai->name, "wm8960-hifi")) {
-            codec_dai = rtd->codec_dai;
-            break;
-        }
-    }
-    if (!codec_dai) {
-        dev_err(&pdev->dev, "failed to get codec dai\n");
-        return -EINVAL;
-    }
-
-    // When ADCLRC is configured as a GPIO, DACLRC is used for the ADCs
-    if (of_property_read_bool(codec_node, "wlf,adclrc-as-gpio")) {
-        snd_soc_component_update_bits(codec_dai->component, WM8960_IFACE2, 0x40, 0x40);
-    }
-
     return ret;
 }
 
@@ -141,10 +122,10 @@ static struct platform_driver mt762x_wm8960_machine = {
     .driver = {
         .name = "mt762x-wm8960",
 #ifdef CONFIG_OF
-        .of_match_table = mt762x_wm8960_machine_dt_match,
+        .of_match_table = mt762x_wm8960_machine_dt_match
 #endif
     },
-    .probe = mt762x_wm8960_machine_probe,
+    .probe = mt762x_wm8960_machine_probe
 };
 
 module_platform_driver(mt762x_wm8960_machine);

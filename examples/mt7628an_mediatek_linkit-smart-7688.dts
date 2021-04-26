@@ -1,5 +1,3 @@
-/dts-v1/;
-
 #include "mt7628an.dtsi"
 
 #include <dt-bindings/gpio/gpio.h>
@@ -34,7 +32,7 @@
 		compatible = "gpio-leds";
 
 		led_wifi: wifi {
-			label = "linkit-smart-7688:orange:wifi";
+			label = "orange:wifi";
 			gpios = <&gpio 44 GPIO_ACTIVE_LOW>;
 		};
 	};
@@ -88,7 +86,7 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&spi_pins>, <&spi_cs1_pins>;
 
-	m25p80@0 {
+	flash@0 {
 		compatible = "jedec,spi-nor";
 		reg = <0>;
 		spi-max-frequency = <40000000>;
@@ -139,6 +137,8 @@
 		compatible = "wlf,wm8960";
 		reg = <0x1a>;
 		wlf,shared-lrclk;
+		wlf,hp-cfg = <0 0 0>;
+		wlf,gpio-cfg = <0 0>;
 	};
 };
 
@@ -155,7 +155,7 @@
 };
 
 &ethernet {
-	mtd-mac-address = <&factory 0x28>;
+	mtd-mac-address = <&factory 0x2e>;
 };
 
 &sdhci {
@@ -183,12 +183,12 @@
 		audio-routing =
 			"Headphone", "HP_L",
 			"Headphone", "HP_R",
-			"Ext Spk", "SPK_LN",
-			"Ext Spk", "SPK_LP",
-			"Ext Spk", "SPK_RN",
-			"Ext Spk", "SPK_RP",
-			"Mic", "MICB",
-			"LINPUT1", "Mic",
+			"Speaker", "SPK_LN",
+			"Speaker", "SPK_LP",
+			"Speaker", "SPK_RN",
+			"Speaker", "SPK_RP",
+			"Microphone", "MICB",
+			"LINPUT1", "Microphone",
 			"LINPUT2", "Line In",
 			"RINPUT2", "Line In";
 	};
